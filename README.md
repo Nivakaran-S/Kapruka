@@ -56,7 +56,7 @@ npm run dev    # http://localhost:3000
 | Var | Side | Notes |
 |-----|------|-------|
 | `GROQ_API_KEY` | backend | required (Groq key) |
-| `GROQ_MODEL` | backend | default `openai/gpt-oss-120b` |
+| `GROQ_MODEL` | backend | default `llama-3.3-70b-versatile` |
 | `KAPRUKA_MCP_URL` | backend | default `https://mcp.kapruka.com/mcp` |
 | `ALLOWED_ORIGINS` | backend | `*.vercel.app` already allowed |
 | `NEXT_PUBLIC_BACKEND_URL` | frontend | the HF Space URL |

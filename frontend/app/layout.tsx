@@ -45,9 +45,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${notoSinhala.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body suppressHydrationWarning className="min-h-full">
+        {children}
+      </body>
     </html>
   );
 }

@@ -25,9 +25,32 @@ from langgraph.prebuilt import create_react_agent
 
 from prompts import system_prompt
 
-MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
-REASONING_EFFORT = os.environ.get("GROQ_REASONING_EFFORT", "medium")
+MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+REASONING_EFFORT = os.environ.get("GROQ_REASONING_EFFORT", "low")
+MAX_TOKENS = int(os.environ.get("GROQ_MAX_TOKENS", "1024"))
+RECURSION_LIMIT = int(os.environ.get("AGENT_RECURSION_LIMIT", "12"))
 MCP_URL = os.environ.get("KAPRUKA_MCP_URL", "https://mcp.kapruka.com/mcp")
+
+# Concise, model-facing tool descriptions. The raw MCP docstrings are ~3k tokens
+# total and are sent on EVERY call — these one-liners cut that to a few hundred.
+TOOL_DESCRIPTIONS = {
+    "kapruka_search_products": (
+        "Search the Kapruka catalog. q must be >=3 specific chars (e.g. 'chocolate cake', "
+        "not 'cake'). Optional: category, min_price, max_price, in_stock_only, sort, limit, currency."
+    ),
+    "kapruka_get_product": "Full details (images, variants, stock, price) for one product_id.",
+    "kapruka_list_categories": "List Kapruka product categories.",
+    "kapruka_list_delivery_cities": "Find Kapruka delivery cities by name (query). Returns canonical city names.",
+    "kapruka_check_delivery": (
+        "Delivery feasibility + flat LKR rate for a city on a date. Pass product_id for "
+        "cake/flower perishable warnings."
+    ),
+    "kapruka_create_order": (
+        "Create a guest order, returns a click-to-pay URL. Needs cart[{product_id,quantity,icing_text?}], "
+        "recipient{name,phone}, delivery{address,city,date}, sender{name}, optional gift_message."
+    ),
+    "kapruka_track_order": "Track an order by its Kapruka order_number (from the post-payment email).",
+}
 
 # Stateless mode: on ephemeral serverless (Vercel sets VERCEL=1) in-process memory
 # can't be trusted across instances, so we don't use the checkpointer and instead
@@ -42,9 +65,20 @@ MEMORY = InMemorySaver()
 _tools_cache: list[StructuredTool] | None = None
 
 
+def _slim_schema(node: Any) -> Any:
+    """Drop verbose `description`/`title` metadata from a JSON schema (keeps types,
+    required, enums, bounds). Sent to the model on every call, so this saves tokens."""
+    if isinstance(node, dict):
+        return {k: _slim_schema(v) for k, v in node.items() if k not in ("description", "title")}
+    if isinstance(node, list):
+        return [_slim_schema(item) for item in node]
+    return node
+
+
 def _force_json(tool: StructuredTool) -> StructuredTool:
     """Wrap a Kapruka MCP tool so every call requests structured JSON output
-    (the MCP default is markdown; the gallery needs JSON)."""
+    (the MCP default is markdown; the gallery needs JSON), with a concise
+    description and slimmed arg schema to keep per-call tokens low."""
 
     async def _call(**kwargs: Any) -> Any:
         params = dict(kwargs.get("params") or {})
@@ -53,8 +87,8 @@ def _force_json(tool: StructuredTool) -> StructuredTool:
 
     return StructuredTool(
         name=tool.name,
-        description=(tool.description or "").strip(),
-        args_schema=tool.args_schema,
+        description=TOOL_DESCRIPTIONS.get(tool.name, (tool.description or "").strip()[:200]),
+        args_schema=_slim_schema(tool.args_schema),
         coroutine=_call,
     )
 
@@ -71,7 +105,12 @@ async def get_tools() -> list[StructuredTool]:
 
 
 def _make_llm() -> ChatGroq:
-    kwargs: dict[str, Any] = {"model": MODEL, "temperature": 0.6}
+    kwargs: dict[str, Any] = {
+        "model": MODEL,
+        "temperature": 0.6,
+        "max_tokens": MAX_TOKENS,  # cap output tokens (helps stay under TPM limits)
+        "max_retries": 2,          # auto-retry transient 429s (respects Retry-After)
+    }
     if "gpt-oss" in MODEL:
         kwargs["reasoning_effort"] = REASONING_EFFORT
     return ChatGroq(**kwargs)
@@ -145,7 +184,7 @@ async def run_agent(
         # No durable memory available — replay the full client history each turn.
         agent = create_react_agent(_make_llm(), tools, prompt=system_prompt(cart))
         payload = {"messages": _to_lc_messages(messages)}
-        config: dict[str, Any] = {}
+        config: dict[str, Any] = {"recursion_limit": RECURSION_LIMIT}
     else:
         # Always-on process — the shared MEMORY checkpointer keeps history per thread,
         # so we only feed the latest user message.
@@ -153,7 +192,7 @@ async def run_agent(
             _make_llm(), tools, prompt=system_prompt(cart), checkpointer=MEMORY
         )
         payload = {"messages": [HumanMessage(content=_last_user(messages))]}
-        config = {"configurable": {"thread_id": thread_id}}
+        config = {"configurable": {"thread_id": thread_id}, "recursion_limit": RECURSION_LIMIT}
 
     try:
         async for ev in agent.astream_events(payload, config=config, version="v2"):
@@ -181,5 +220,11 @@ async def run_agent(
                 }
         yield {"type": "done"}
     except Exception as exc:  # noqa: BLE001
-        yield {"type": "error", "message": str(exc)}
+        msg = str(exc)
+        low = msg.lower()
+        if "rate_limit" in low or "429" in low or "tokens per minute" in low:
+            msg = "I'm getting rate-limited right now 🙏 — please try again in a few seconds."
+        elif "recursion" in low and "limit" in low:
+            msg = "That request needed too many steps — could you narrow it down a little?"
+        yield {"type": "error", "message": msg}
         yield {"type": "done"}

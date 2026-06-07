@@ -45,8 +45,10 @@ Browser (Vercel / Next.js)  ──SSE──>  FastAPI (here, :7860)
 | Var | Required | Default | Notes |
 |-----|----------|---------|-------|
 | `GROQ_API_KEY` | ✅ secret | — | Groq API key |
-| `GROQ_MODEL` | optional | `openai/gpt-oss-120b` | any Groq tool-use model |
-| `GROQ_REASONING_EFFORT` | optional | `medium` | gpt-oss only |
+| `GROQ_MODEL` | optional | `llama-3.3-70b-versatile` | any Groq tool-use model |
+| `GROQ_MAX_TOKENS` | optional | `1024` | caps output tokens (TPM control) |
+| `GROQ_REASONING_EFFORT` | optional | `low` | gpt-oss models only |
+| `AGENT_RECURSION_LIMIT` | optional | `12` | max LangGraph steps per turn |
 | `KAPRUKA_MCP_URL` | optional | `https://mcp.kapruka.com/mcp` | |
 | `ALLOWED_ORIGINS` | optional | — | comma-separated; `*.vercel.app` is allowed by default |
 
