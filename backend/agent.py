@@ -16,7 +16,7 @@ import json
 import os
 from typing import Any, AsyncGenerator
 
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.tools import StructuredTool
 from langchain_groq import ChatGroq
 from langchain_mcp_adapters.client import MultiServerMCPClient
@@ -28,6 +28,12 @@ from prompts import system_prompt
 MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 REASONING_EFFORT = os.environ.get("GROQ_REASONING_EFFORT", "medium")
 MCP_URL = os.environ.get("KAPRUKA_MCP_URL", "https://mcp.kapruka.com/mcp")
+
+# Stateless mode: on ephemeral serverless (Vercel sets VERCEL=1) in-process memory
+# can't be trusted across instances, so we don't use the checkpointer and instead
+# replay the full client-sent history each turn. On HF (always-on process) we use
+# the per-thread checkpointer for efficient memory.
+STATELESS = bool(os.environ.get("KAPI_STATELESS") or os.environ.get("VERCEL"))
 
 # In-process conversation memory (per thread_id). Resets on restart — fine for
 # a single-process HF Space; swap for a persistent saver to survive restarts.
@@ -100,6 +106,18 @@ def _last_user(messages: list[dict[str, Any]]) -> str:
     return messages[-1].get("content", "") if messages else ""
 
 
+def _to_lc_messages(messages: list[dict[str, Any]]) -> list[Any]:
+    """Convert the client-sent chat history to LangChain messages (stateless mode)."""
+    out: list[Any] = []
+    for m in messages:
+        role, content = m.get("role"), m.get("content", "")
+        if role == "user":
+            out.append(HumanMessage(content=content))
+        elif role == "assistant" and content:
+            out.append(AIMessage(content=content))
+    return out
+
+
 def _is_error(data: Any) -> bool:
     if isinstance(data, dict) and "error" in data:
         return True
@@ -122,20 +140,23 @@ async def run_agent(
         yield {"type": "done"}
         return
 
-    # Build per-request so the system prompt reflects the current cart; the shared
-    # MEMORY checkpointer keeps history across requests for the same thread_id.
-    agent = create_react_agent(
-        _make_llm(), tools, prompt=system_prompt(cart), checkpointer=MEMORY
-    )
-    user_text = _last_user(messages)
-    config = {"configurable": {"thread_id": thread_id}}
+    # Build per-request so the system prompt reflects the current cart.
+    if STATELESS:
+        # No durable memory available — replay the full client history each turn.
+        agent = create_react_agent(_make_llm(), tools, prompt=system_prompt(cart))
+        payload = {"messages": _to_lc_messages(messages)}
+        config: dict[str, Any] = {}
+    else:
+        # Always-on process — the shared MEMORY checkpointer keeps history per thread,
+        # so we only feed the latest user message.
+        agent = create_react_agent(
+            _make_llm(), tools, prompt=system_prompt(cart), checkpointer=MEMORY
+        )
+        payload = {"messages": [HumanMessage(content=_last_user(messages))]}
+        config = {"configurable": {"thread_id": thread_id}}
 
     try:
-        async for ev in agent.astream_events(
-            {"messages": [HumanMessage(content=user_text)]},
-            config=config,
-            version="v2",
-        ):
+        async for ev in agent.astream_events(payload, config=config, version="v2"):
             kind = ev.get("event")
             if kind == "on_chat_model_stream":
                 chunk = ev["data"].get("chunk")

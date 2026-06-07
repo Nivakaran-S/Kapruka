@@ -50,6 +50,27 @@ Browser (Vercel / Next.js)  ──SSE──>  FastAPI (here, :7860)
 | `KAPRUKA_MCP_URL` | optional | `https://mcp.kapruka.com/mcp` | |
 | `ALLOWED_ORIGINS` | optional | — | comma-separated; `*.vercel.app` is allowed by default |
 
+## Deploy to Vercel (serverless)
+
+This backend also runs on Vercel as a Python serverless function (`api/index.py`
+exposes the FastAPI app; `vercel.json` rewrites all routes to it).
+
+1. **New Project** in Vercel → import this repo.
+2. Set **Root Directory = `backend`**.
+3. Add env var **`GROQ_API_KEY`** (and optionally `GROQ_MODEL`). `VERCEL=1` is set
+   automatically, which switches the agent to **stateless mode** (full chat history
+   is replayed each turn instead of using server-side memory).
+4. Deploy. Your API is at `https://<project>.vercel.app` (test `…/health`).
+5. Point the frontend's `NEXT_PUBLIC_BACKEND_URL` at that URL.
+
+**Caveats (why HF Spaces is still the recommended host):**
+- **No durable memory** — serverless instances are ephemeral, so the LangGraph
+  checkpointer can't be relied on; the app runs stateless on Vercel.
+- **Bundle size** — the LangChain stack is large and may approach Vercel's 250 MB
+  function limit. If a build fails on size, host the Docker image on HF instead.
+- **Duration** — long agent turns are bounded by `maxDuration` (60s here; raise on
+  Pro). Groq is fast, so most turns finish well under that.
+
 ## Local development
 ```bash
 python -m venv .venv && .venv/Scripts/activate   # (Windows) or source .venv/bin/activate
