@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.git/
+probe_mcp.py
+probe2.py
+probe_lc.py
+test_bridge.py
+test_lg.py
+e2e_test.py
+mcp_probe_output.json
+mcp_probe2.json

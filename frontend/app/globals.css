@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+/* ----------------------------------------------------------------------------
+   Kapi — Sri Lankan design system (teal / gold / cream)
+   Upgraded with ui-ux-pro-max "Liquid Glass" style + accessibility rules,
+   while keeping the mandated brand palette.
+---------------------------------------------------------------------------- */
+@theme inline {
+  --color-cream: #fbf6ec;
+  --color-cream-soft: #f4ecdc;
+  --color-card: #ffffff;
+
+  --color-teal: #0f6e56;
+  --color-teal-light: #1d9e75;
+  --color-teal-dark: #085041;
+  --color-teal-wash: #e1f5ee;
+
+  --color-gold: #b8791b;
+  --color-gold-light: #fac775;
+  --color-gold-wash: #faeeda;
+
+  --color-ink: #2a2520;
+  --color-muted: #7a7167;
+  --color-line: #ece3d4;
+
+  --font-display: var(--font-rubik), var(--font-geist-sans), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sinhala: var(--font-noto-sinhala), var(--font-geist-sans), sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --shadow-card: 0 1px 2px rgba(42, 37, 32, 0.05), 0 10px 30px -16px rgba(8, 80, 65, 0.22);
+  --shadow-pop: 0 2px 6px rgba(42, 37, 32, 0.06), 0 24px 48px -20px rgba(8, 80, 65, 0.32);
+}
+
+:root {
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 100% -10%, rgba(29, 158, 117, 0.1), transparent 60%),
+    radial-gradient(900px 520px at -10% 110%, rgba(250, 199, 117, 0.14), transparent 55%),
+    radial-gradient(700px 700px at 120% 120%, rgba(184, 121, 27, 0.06), transparent 60%),
+    var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Sinhala glyphs render with Noto Sans Sinhala automatically */
+:lang(si),
+.sinhala {
+  font-family: var(--font-sinhala);
+}
+
+/* ---- Liquid Glass surfaces -------------------------------------------- */
+.glass {
+  background: color-mix(in srgb, var(--color-card) 68%, transparent);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid color-mix(in srgb, #ffffff 55%, var(--color-line));
+}
+.glass-strong {
+  background: color-mix(in srgb, var(--color-card) 88%, transparent);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+.card-premium {
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.25s ease;
+}
+.card-premium:hover {
+  box-shadow: var(--shadow-pop);
+}
+
+/* ---- Accessibility & interaction (ui-ux-pro-max rules) ----------------- */
+button:not(:disabled),
+a,
+[role="button"] {
+  cursor: pointer;
+}
+:focus-visible {
+  outline: 2px solid var(--color-teal-light);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Thin, themed scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #d9cdb6;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---- animations -------------------------------------------------------- */
+@keyframes kapi-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes kapi-dot {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-3px); }
+}
+@keyframes kapi-shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.kapi-bob { animation: kapi-bob 3.5s ease-in-out infinite; }
+.kapi-dot { animation: kapi-dot 1.2s infinite ease-in-out; }
+
+.kapi-skeleton {
+  background: linear-gradient(90deg, #efe7d8 25%, #f7f0e2 37%, #efe7d8 63%);
+  background-size: 800px 100%;
+  animation: kapi-shimmer 1.4s infinite linear;
+}
+
+/* gold/teal gradient text for the wordmark */
+.kapi-wordmark {
+  background: linear-gradient(100deg, var(--color-teal-dark), var(--color-teal-light) 55%, var(--color-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Respect reduced-motion (ui-ux-pro-max accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .kapi-bob,
+  .kapi-dot,
+  .kapi-skeleton {
+    animation: none !important;
+  }
+}
