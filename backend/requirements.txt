@@ -1,13 +1,11 @@
 fastapi>=0.115,<1.0
-uvicorn[standard]==0.49.0
+uvicorn==0.49.0
 python-dotenv>=1.0,<2.0
 
-# Agent stack: LangGraph ReAct agent + Groq + Kapruka MCP tools
+# Agent stack: LangGraph ReAct agent + Groq + Kapruka MCP tools.
+# Only the top-level packages are pinned. groq, mcp, and langchain-core are pulled
+# transitively at compatible versions — pinning groq==1.4.0 conflicted with
+# langchain-groq (which requires groq<1.0.0) under uv's strict resolver.
 langgraph==1.2.4
-langchain-core==1.4.1
 langchain-groq==1.1.2
 langchain-mcp-adapters==0.2.2
-
-# Transitive but pinned for reproducible HF builds (used directly by probes too)
-groq==1.4.0
-mcp==1.27.2
