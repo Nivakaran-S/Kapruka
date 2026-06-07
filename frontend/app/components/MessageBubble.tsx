@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { isSinhala } from "../lib/store";
 import type { ChatMessage } from "../lib/types";
 import { KaviAvatar, TypingDots } from "./KaviAvatar";
@@ -27,8 +29,12 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
       >
         {showTyping ? (
           <TypingDots />
-        ) : (
+        ) : isUser ? (
           <p className="whitespace-pre-wrap break-words">{message.content}</p>
+        ) : (
+          <div className="md">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+          </div>
         )}
       </div>
     </motion.div>
