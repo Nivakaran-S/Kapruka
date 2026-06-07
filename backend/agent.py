@@ -66,11 +66,20 @@ MEMORY = InMemorySaver()
 _tools_cache: list[StructuredTool] | None = None
 
 
+# Schema keys the model doesn't need (the MCP server re-validates server-side).
+# Dropping them shrinks the per-call payload a lot (esp. create_order's nested schema).
+_SCHEMA_DROP_KEYS = {
+    "description", "title", "default", "format", "examples",
+    "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum",
+    "minLength", "maxLength", "minItems", "maxItems",
+}
+
+
 def _slim_schema(node: Any) -> Any:
-    """Drop verbose `description`/`title` metadata from a JSON schema (keeps types,
-    required, enums, bounds). Sent to the model on every call, so this saves tokens."""
+    """Strip non-essential metadata/bounds from a JSON schema (keeps type, enum,
+    required, properties). Sent to the model every call, so this saves many tokens."""
     if isinstance(node, dict):
-        return {k: _slim_schema(v) for k, v in node.items() if k not in ("description", "title")}
+        return {k: _slim_schema(v) for k, v in node.items() if k not in _SCHEMA_DROP_KEYS}
     if isinstance(node, list):
         return [_slim_schema(item) for item in node]
     return node
@@ -86,6 +95,48 @@ def _deref(node: Any, defs: dict) -> Any:
     if isinstance(node, list):
         return [_deref(item, defs) for item in node]
     return node
+
+
+def _relax_numeric(node: Any) -> Any:
+    """Let numeric leaves also accept a string. Models (esp. Llama) often emit
+    numbers as strings (e.g. max_price="5000"); we coerce them back at call time."""
+    if isinstance(node, dict):
+        out = {}
+        for k, v in node.items():
+            if k == "type" and v in ("number", "integer"):
+                out[k] = [v, "string"]
+            else:
+                out[k] = _relax_numeric(v)
+        return out
+    if isinstance(node, list):
+        return [_relax_numeric(item) for item in node]
+    return node
+
+
+_NUMERIC_FIELDS = {"min_price", "max_price", "limit", "depth", "quantity"}
+
+
+def _to_num(s: Any) -> Any:
+    if not isinstance(s, str):
+        return s
+    try:
+        f = float(s)
+        return int(f) if f.is_integer() else f
+    except ValueError:
+        return s
+
+
+def _coerce_numbers(params: dict) -> dict:
+    """Coerce stringified numbers back to numbers before calling the MCP tool."""
+    for field in _NUMERIC_FIELDS:
+        if field in params:
+            params[field] = _to_num(params[field])
+    cart = params.get("cart")
+    if isinstance(cart, list):
+        for item in cart:
+            if isinstance(item, dict) and "quantity" in item:
+                item["quantity"] = _to_num(item["quantity"])
+    return params
 
 
 # Fields not worth exposing to the model (noise / token cost / error surface).
@@ -116,7 +167,7 @@ def _inner_schema(args_schema: dict) -> dict:
         if isinstance(req, list):
             resolved["required"] = [r for r in req if r not in DROP_FIELDS]
         resolved.setdefault("type", "object")
-    return _slim_schema(resolved)
+    return _relax_numeric(_slim_schema(resolved))
 
 
 def _force_json(tool: StructuredTool) -> StructuredTool:
@@ -129,6 +180,15 @@ def _force_json(tool: StructuredTool) -> StructuredTool:
             params = dict(kwargs["params"])
         else:
             params = {k: v for k, v in kwargs.items() if v is not None}
+        params = _coerce_numbers(params)
+        # Keep result payloads small (fed back to the model each round) — cap/limit.
+        if "limit" in params:
+            try:
+                params["limit"] = max(1, min(int(params["limit"]), 8))
+            except (TypeError, ValueError):
+                params["limit"] = 6
+        elif tool.name == "kapruka_search_products":
+            params["limit"] = 6
         params["response_format"] = "json"
         try:
             return await tool.ainvoke({"params": params})
