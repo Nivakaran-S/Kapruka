@@ -20,6 +20,8 @@ export function Composer() {
   const { send, state } = useKapi();
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
+  // Resolved after mount so SSR and first client render match (avoids hydration mismatch).
+  const [hasVoice, setHasVoice] = useState(false);
   const recogRef = useRef<SpeechRecognitionLike | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
@@ -43,6 +45,7 @@ export function Composer() {
     r.onerror = () => setListening(false);
     r.onend = () => setListening(false);
     recogRef.current = r;
+    setHasVoice(true);
   }, []);
 
   function autosize() {
@@ -76,9 +79,6 @@ export function Composer() {
       }
     }
   }
-
-  const hasVoice = typeof window !== "undefined" &&
-    ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
 
   return (
     <div className="glass border-t border-line px-3 py-3">
