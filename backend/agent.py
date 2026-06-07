@@ -97,19 +97,20 @@ def _deref(node: Any, defs: dict) -> Any:
     return node
 
 
-def _relax_numeric(node: Any) -> Any:
-    """Let numeric leaves also accept a string. Models (esp. Llama) often emit
-    numbers as strings (e.g. max_price="5000"); we coerce them back at call time."""
+def _relax_types(node: Any) -> Any:
+    """Let numeric/boolean leaves also accept a string. Models (esp. Llama) often
+    emit numbers/bools as strings (max_price="5000", in_stock_only="true"); we
+    coerce them back at call time."""
     if isinstance(node, dict):
         out = {}
         for k, v in node.items():
-            if k == "type" and v in ("number", "integer"):
+            if k == "type" and v in ("number", "integer", "boolean"):
                 out[k] = [v, "string"]
             else:
-                out[k] = _relax_numeric(v)
+                out[k] = _relax_types(v)
         return out
     if isinstance(node, list):
-        return [_relax_numeric(item) for item in node]
+        return [_relax_types(item) for item in node]
     return node
 
 
@@ -126,8 +127,15 @@ def _to_num(s: Any) -> Any:
         return s
 
 
-def _coerce_numbers(params: dict) -> dict:
-    """Coerce stringified numbers back to numbers before calling the MCP tool."""
+def _coerce_scalar(v: Any) -> Any:
+    """Coerce stringified booleans back to real booleans."""
+    if isinstance(v, str) and v.strip().lower() in ("true", "false"):
+        return v.strip().lower() == "true"
+    return v
+
+
+def _coerce_args(params: dict) -> dict:
+    """Coerce stringified numbers/booleans back to proper types before the MCP call."""
     for field in _NUMERIC_FIELDS:
         if field in params:
             params[field] = _to_num(params[field])
@@ -136,7 +144,15 @@ def _coerce_numbers(params: dict) -> dict:
         for item in cart:
             if isinstance(item, dict) and "quantity" in item:
                 item["quantity"] = _to_num(item["quantity"])
-    return params
+
+    def walk(o: Any) -> Any:
+        if isinstance(o, dict):
+            return {k: walk(v) for k, v in o.items()}
+        if isinstance(o, list):
+            return [walk(x) for x in o]
+        return _coerce_scalar(o)
+
+    return walk(params)
 
 
 # Fields not worth exposing to the model (noise / token cost / error surface).
@@ -167,7 +183,7 @@ def _inner_schema(args_schema: dict) -> dict:
         if isinstance(req, list):
             resolved["required"] = [r for r in req if r not in DROP_FIELDS]
         resolved.setdefault("type", "object")
-    return _relax_numeric(_slim_schema(resolved))
+    return _relax_types(_slim_schema(resolved))
 
 
 def _force_json(tool: StructuredTool) -> StructuredTool:
@@ -180,7 +196,7 @@ def _force_json(tool: StructuredTool) -> StructuredTool:
             params = dict(kwargs["params"])
         else:
             params = {k: v for k, v in kwargs.items() if v is not None}
-        params = _coerce_numbers(params)
+        params = _coerce_args(params)
         # Keep result payloads small (fed back to the model each round) — cap/limit.
         if "limit" in params:
             try:
