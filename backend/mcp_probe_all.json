@@ -1,0 +1,507 @@
+{
+  "kapruka_list_categories {\"depth\": 1}": {
+    "isError": false,
+    "data": {
+      "categories": [
+        {
+          "name": "Automobile",
+          "url": "https://www.kapruka.com/online/automobile"
+        },
+        {
+          "name": "Ayurvedic",
+          "url": "https://www.kapruka.com/online/ayurvedic"
+        },
+        {
+          "name": "Bicycle",
+          "url": "https://www.kapruka.com/online/bicycles"
+        },
+        {
+          "name": "Books",
+          "url": "https://www.kapruka.com/online/books"
+        },
+        {
+          "name": "Chocolates",
+          "url": "https://www.kapruka.com/online/chocolates"
+        },
+        {
+          "name": "Clothing",
+          "url": "https://www.kapruka.com/online/clothing"
+        },
+        {
+          "name": "combopack",
+          "url": "https://www.kapruka.com/online/combogifts"
+        },
+        {
+          "name": "Cosmetics",
+          "url": "https://www.kapruka.com/online/cosmetics"
+        },
+        {
+          "name": "Curd",
+          "url": "https://www.kapruka.com/online/curd"
+        },
+        {
+          "name": "Electronic",
+          "url": "https://www.kapruka.com/online/electronics"
+        },
+        {
+          "name": "Fashion",
+          "url": "https://www.kapruka.com/online/fashion"
+        },
+        {
+          "name": "Fruits",
+          "url": "https://www.kapruka.com/online/fruitbaskets"
+        },
+        {
+          "name": "Giftcert",
+          "url": "https://www.kapruka.com/online/giftvouchers"
+        },
+        {
+          "name": "Giftset",
+          "url": "https://www.kapruka.com/online/giftset"
+        },
+        {
+          "name": "GreetingCards",
+          "url": "https://www.kapruka.com/online/greetingcards"
+        },
+        {
+          "name": "Grocery",
+          "url": "https://www.kapruka.com/online/grocery"
+        },
+        {
+          "name": "Household",
+          "url": "https://www.kapruka.com/online/home_lifestyle"
+        },
+        {
+          "name": "Jewellery",
+          "url": "https://www.kapruka.com/online/jewellery"
+        },
+        {
+          "name": "KidsToys",
+          "url": "https://www.kapruka.com/online/toys"
+        },
+        {
+          "name": "Liquor",
+          "url": "https://www.kapruka.com/online/liquor"
+        },
+        {
+          "name": "BabyItems",
+          "url": "https://www.kapruka.com/online/baby"
+        },
+        {
+          "name": "party",
+          "url": "https://www.kapruka.com/online/party"
+        },
+        {
+          "name": "Perfumes",
+          "url": "https://www.kapruka.com/online/perfumes"
+        },
+        {
+          "name": "Pet",
+          "url": "https://www.kapruka.com/online/pet"
+        },
+        {
+          "name": "Pharmacy",
+          "url": "https://www.kapruka.com/online/pharmacy"
+        },
+        {
+          "name": "pirikara",
+          "url": "https://www.kapruka.com/online/pirikara"
+        },
+        {
+          "name": "Childrens",
+          "url": "https://www.kapruka.com/online/childrens"
+        },
+        {
+          "name": "Schoolpride",
+          "url": "https://www.kapruka.com/online/schoolpride"
+        },
+        {
+          "name": "Softtoy",
+          "url": "https://www.kapruka.com/online/softtoy"
+        },
+        {
+          "name": "Sports",
+          "url": "https://www.kapruka.com/online/sports"
+        },
+        {
+          "name": "Vegetables",
+          "url": "https://www.kapruka.com/online/vegetables"
+        },
+        {
+          "name": "Adult Products",
+          "url": "https://www.kapruka.com/online/intimate_essentials"
+        },
+        {
+          "name": "thaipongle",
+          "url": "https://www.kapruka.com/online/thaipongle"
+        },
+        {
+          "name": "teachersday",
+          "url": "https://www.kapruka.com/online/teachersday"
+        },
+        {
+          "name": "samedaydelivery",
+          "url": "https://www.kapruka.com/online/samedaydelivery"
+        },
+        {
+          "name": "bestsellers",
+          "url": "https://www.kapruka.com/online/bestsellers"
+        },
+        {
+          "name": "diwali",
+          "url": "https://www.kapruka.com/online/diwali"
+        },
+        {
+          "name": "newadditions",
+          "url": "https://www.kapruka.com/online/newadditions"
+        },
+        {
+          "name": "graduation",
+          "url": "https://www.kapruka.com/online/graduation"
+        },
+        {
+          "name": "valentine",
+          "url": "https://www.kapruka.com/online/valentine"
+        },
+        {
+          "name": "newyear_january",
+          "url": "https://www.kapruka.com/online/newyear_january"
+        },
+        {
+          "name": "fathersday",
+          "url": "https://www.kapruka.com/online/fathersday"
+        },
+        {
+          "name": "childrensday",
+          "url": "https://www.kapruka.com/online/childrensday"
+        },
+        {
+          "name": "christmas",
+          "url": "https://www.kapruka.com/online/christmas"
+        },
+        {
+          "name": "anniversary",
+          "url": "https://www.kapruka.com/online/anniversary"
+        },
+        {
+          "name": "birthday",
+          "url": "https://www.kapruka.com/online/birthday"
+        },
+        {
+          "name": "bridetobe",
+          "url": "https://www.kapruka.com/online/bridetobe"
+        },
+        {
+          "name": "corporate",
+          "url": "https://www.kapruka.com/online/corporate"
+        },
+        {
+          "name": "lover",
+          "url": "https://www.kapruka.com/online/lover"
+        },
+        {
+          "name": "momtobe",
+          "url": "https://www.kapruka.com/online/momtobe"
+        },
+        {
+          "name": "mother",
+          "url": "https://www.kapruka.com/online/mother"
+        },
+        {
+          "name": "sympathies",
+          "url": "https://www.kapruka.com/online/sympathies"
+        },
+        {
+          "name": "uniquegifts",
+          "url": "https://www.kapruka.com/online/uniquegifts"
+        },
+        {
+          "name": "wedding",
+          "url": "https://www.kapruka.com/online/wedding"
+        },
+        {
+          "name": "womenday",
+          "url": "https://www.kapruka.com/online/womenday"
+        },
+        {
+          "name": "youandme",
+          "url": "https://www.kapruka.com/online/youandme"
+        },
+        {
+          "name": "household",
+          "url": "https://www.kapruka.com/online/household"
+        },
+        {
+          "name": "ornaments",
+          "url": "https://www.kapruka.com/online/ornaments"
+        },
+        {
+          "name": "promotions",
+          "url": "https://www.kapruka.com/online/promotions"
+        },
+        {
+          "name": "cakes",
+          "url": "https://www.kapruka.com/online/cakes"
+        },
+        {
+          "name": "flowers",
+          "url": "https://www.kapruka.com/online/flowers"
+        },
+        {
+          "name": "Personalized Gifts",
+          "url": "https://www.kapruka.com/online/personalized_gifts"
+        },
+        {
+          "name": "halloween",
+          "url": "https://www.kapruka.com/online/halloween"
+        },
+        {
+          "name": "Services",
+          "url": "https://www.kapruka.com/online/services"
+        }
+      ]
+    }
+  },
+  "kapruka_search_products {\"q\": \"red roses\", \"limit\": 3}": {
+    "isError": false,
+    "data": {
+      "results": [
+        {
+          "id": "FLOWERS00T2075",
+          "name": "6 Red Rose Bouquet With Elegant Wrapping",
+          "summary": "flowers - Bouquet, Redroses Elevate Your Romantic Gestures With The 6 Red Rose Bouquet With Elegant Wrapping, A Quintessential Floral Arrangement Designed To Express Deep Emotions. Perfect For Vale...",
+          "price": {
+            "amount": 5210,
+            "currency": "LKR"
+          },
+          "compare_at_price": null,
+          "in_stock": true,
+          "stock_level": "low",
+          "image_url": "https://static2.kapruka.com/product-image/width=330,quality=93,f=auto/shops/flowershop/flowerImages/zooms/1770460761093_00987.jpg",
+          "category": {
+            "id": "cat_general",
+            "name": "General",
+            "slug": "general"
+          },
+          "rating": null,
+          "ships_internationally": true,
+          "url": "https://www.kapruka.com/buyonline/6-red-rose-bouquet-with-elegan/kid/flowers00t2075"
+        },
+        {
+          "id": "FLOWERS00T2089",
+          "name": "Red Heart Gift Box Arrangement With Red Roses Ferrero Rocher Cho",
+          "summary": "flowers - Redroses The Red Heart Gift Box Arrangement With Red Roses And Ferrero Rocher Chocolates Makes A Striking Romantic Gesture, Ideal For Expressing Love On Special Occasions. This Exquisite ...",
+          "price": {
+            "amount": 12560,
+            "currency": "LKR"
+          },
+          "compare_at_price": null,
+          "in_stock": true,
+          "stock_level": "low",
+          "image_url": "https://static2.kapruka.com/product-image/width=330,quality=93,f=auto/shops/flowershop/flowerImages/zooms/1773993674851_dsc05962.jpg",
+          "category": {
+            "id": "cat_general",
+            "name": "General",
+            "slug": "general"
+          },
+          "rating": null,
+          "ships_internationally": true,
+          "url": "https://www.kapruka.com/buyonline/red-heart-gift-box-arrangement/kid/flowers00t2089"
+        }
+      ],
+      "next_cursor": "eyJ1IjoiTXc9PSIsInAiOjJ9",
+      "applied_filters": {
+        "q": "red roses",
+        "limit": 3,
+        "in_stock_only": true
+      }
+    }
+  },
+  "kapruka_get_product {\"product_id\": \"FLOWERS00T2075\"}": {
+    "isError": false,
+    "data": {
+      "id": "flowers00T2075",
+      "name": "6 Red Rose Bouquet With Elegant Wrapping",
+      "description": "Elevate your romantic gestures with the 6 Red Rose Bouquet With Elegant Wrapping, a quintessential floral arrangement designed to express deep emotions. Perfect for Valentineâ``s Day or simply savoring a heartfelt moment, this bouquet captures the essence of love with its classic appeal.   Includes six vibrant red roses for a timeless romantic gesture.  Wrapped in stylish kraft paper, showcasing a modern design.  Soft ribbon adds a graceful finish to the floral arrangement.  Delicate white Baby`s Breath serves as a gentle filler.  Ideal for occasions like Valentineâ``s Day, anniversaries, and sweet surprises.  Handcrafted by the Kapruka Floral Division, ensuring quality and freshness.  Available exclusively in Sri Lanka through Kapruka Flower Farms.   Order this memorable bouquet today for delivery via Kapruka and share a special moment with someone you love.",
+      "description_format": "plain",
+      "summary": "Elevate your romantic gestures with the 6 Red Rose Bouquet With Elegant Wrapping, a quintessential floral arrangement designed to express deep emotions. Perfect for Valentineâ``s Day or simply savo...",
+      "price": {
+        "amount": 5210,
+        "currency": "LKR"
+      },
+      "compare_at_price": null,
+      "in_stock": true,
+      "stock_level": "low",
+      "category": {
+        "id": "cat_flowers",
+        "name": "flowers",
+        "slug": "flowers",
+        "path": "flowers"
+      },
+      "variants": [
+        {
+          "id": "flowers00T2075_default",
+          "name": "Default",
+          "sku": "flowers00T2075",
+          "price": {
+            "amount": 5210,
+            "currency": "LKR"
+          },
+          "in_stock": true,
+          "stock_level": "low",
+          "attributes": {
+            "weight": "0"
+          }
+        }
+      ],
+      "images": [
+        "https://www.kapruka.com/shops/flowershop/flowerImages/zooms/1770460761093_00987.jpg",
+        "https://www.kapruka.com/shops/specialGifts/additionalImages/flowers00t2075_1.jpg",
+        "https://www.kapruka.com/shops/specialGifts/additionalImages/flowers00t2075_2.jpg"
+      ],
+      "attributes": {
+        "type": "flowers",
+        "subtype": "Flowers",
+        "weight": "0",
+        "vendor": "Flowers"
+      },
+      "shipping": {
+        "ships_from": "LK",
+        "ships_internationally": true,
+        "restricted_countries": []
+      },
+      "rating": null,
+      "url": "https://www.kapruka.com/buyonline/6-red-rose-bouquet-with-elegan/kid/flowers00t2075"
+    }
+  },
+  "kapruka_list_delivery_cities {\"query\": \"Colombo\", \"limit\": 5}": {
+    "isError": false,
+    "data": {
+      "cities": [
+        {
+          "name": "Colombo 01",
+          "aliases": [
+            "Colombo1"
+          ]
+        },
+        {
+          "name": "Colombo 02",
+          "aliases": [
+            "Slave Colombo2"
+          ]
+        },
+        {
+          "name": "Colombo 03",
+          "aliases": [
+            "Kolpity colpity colombo3"
+          ]
+        },
+        {
+          "name": "Colombo 04",
+          "aliases": [
+            "bambala colombo4"
+          ]
+        },
+        {
+          "name": "Colombo 05",
+          "aliases": [
+            "thimbirigasyaya kirulapona narahenpita thibirigas"
+          ]
+        }
+      ],
+      "total_matched": 15,
+      "showing": 5
+    }
+  },
+  "kapruka_check_delivery {\"city\": \"Colombo 01\", \"delivery_date\": \"2026-06-20\", \"product_id\": \"FLOWERS00T2075\"}": {
+    "isError": false,
+    "data": {
+      "city": "Colombo 01",
+      "now": "2026-06-08T02:24:09+05:30",
+      "checked_date": "2026-06-20",
+      "available": true,
+      "rate": 300,
+      "currency": "LKR",
+      "perishable_warning": "Note: Product `FLOWERS00T2075` looks like a perishable item (cake/flower/combo). Same-day or next-day delivery is recommended; freshness on 2026-06-20 is not guaranteed."
+    }
+  },
+  "kapruka_create_order {\"cart\": [{\"product_id\": \"FLOWERS00T2075\", \"quantity\": 1}], \"recipient\": {\"name\": \"Test Recipient\", \"phone\": \"0771234567\"}, \"delivery\": {\"address\": \"123 Test Lane\", \"city\": \"Colombo 01\", \"date\": \"2026-06-20\"}, \"sender\": {\"name\": \"Kapi Test\"}, \"gift_message\": \"Test order \\u2014 please ignore.\"}": {
+    "isError": false,
+    "data": {
+      "summary": {
+        "items_total": 5210,
+        "delivery_fee": 300,
+        "addons_total": 0,
+        "currency": "LKR",
+        "grand_total": 5510
+      },
+      "checkout_url": "https://www.kapruka.com/tools/continue_order.jsp?id=91GPVV2P5NM5",
+      "expires_at": "2026-06-08T03:24:09+05:30",
+      "order_ref": "ORD-20260608-5NM5"
+    }
+  },
+  "kapruka_track_order {\"order_number\": \"VIMP34456CB2\"}": {
+    "isError": false,
+    "data": {
+      "order_number": "VIMP34456CB2",
+      "pnref": "2976049",
+      "status": "delivered",
+      "status_display": "Delivered",
+      "order_date": "Thu May 21 23:49:53 EDT 2026",
+      "delivery_date": "23 / MAY / 2026",
+      "shipped_date": "23 May 2026 07:47:52 GMT",
+      "amount": {
+        "value": "4970",
+        "currency": "LKR"
+      },
+      "payment_method": "0000",
+      "comments": "Delivery successfully completed.",
+      "recipient": {
+        "name": "NETHMI HEMASOORIYA",
+        "phone": "0716608447<BR",
+        "address": "D SILVA MAWATHA, ORION CITY, ANTON BUILDING, GATE NUMBER A LT-OFFICE-",
+        "city": "COLOMBO 08"
+      },
+      "greeting_message": "NO PERSONAL MESSAGE",
+      "special_instructions": "",
+      "progress": [
+        {
+          "step": "Order Confirmed and Awaiting preparation",
+          "timestamp": "MAY 22, 2026 9:28 AM"
+        },
+        {
+          "step": "Order Received",
+          "timestamp": "May 22, 2026 10:19 AM"
+        },
+        {
+          "step": "Kapruka Warehouse, Order is preparing",
+          "timestamp": "MAY 22, 2026 7:07 PM"
+        },
+        {
+          "step": "Kapruka Warehouse, Order Prepared",
+          "timestamp": "MAY 22, 2026 7:07 PM"
+        },
+        {
+          "step": "Other Items received to Kapruka Logistics Facility",
+          "timestamp": "MAY 22, 2026 7:07 PM"
+        },
+        {
+          "step": "Order Has been received by our delivery agent",
+          "timestamp": "MAY 23, 2026 8:43 AM"
+        },
+        {
+          "step": "Order has been out for delivery",
+          "timestamp": "MAY 23, 2026 8:43 AM"
+        },
+        {
+          "step": "Order has been delivered",
+          "timestamp": "MAY 23, 2026 1:17 PM"
+        }
+      ],
+      "live_tracking_available": true,
+      "has_delivery_video": false,
+      "has_delivery_photo": false,
+      "items": []
+    }
+  }
+}

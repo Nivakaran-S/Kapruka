@@ -12,6 +12,7 @@ Run as an async generator that yields SSE-ready events:
 """
 from __future__ import annotations
 
+import copy
 import json
 import os
 from typing import Any, AsyncGenerator
@@ -75,20 +76,70 @@ def _slim_schema(node: Any) -> Any:
     return node
 
 
+def _deref(node: Any, defs: dict) -> Any:
+    """Inline `$ref: #/$defs/X` references using ``defs``."""
+    if isinstance(node, dict):
+        if "$ref" in node:
+            ref = node["$ref"].split("/")[-1]
+            return _deref(copy.deepcopy(defs.get(ref, {})), defs)
+        return {k: _deref(v, defs) for k, v in node.items()}
+    if isinstance(node, list):
+        return [_deref(item, defs) for item in node]
+    return node
+
+
+# Fields not worth exposing to the model (noise / token cost / error surface).
+DROP_FIELDS = {"cursor", "include_stubs", "type", "response_format"}
+# Restore enum constraints lost when stripping descriptions, so the model can't
+# invent invalid values (e.g. sort="price").
+FIELD_ENUMS = {"sort": ["relevance", "price_asc", "price_desc", "newest", "bestseller"]}
+
+
+def _inner_schema(args_schema: dict) -> dict:
+    """Kapruka tools wrap real args in a single `params` object. Models (esp. Llama)
+    won't reliably produce that nesting, so we expose the FLATTENED inner schema to
+    the model and re-wrap into {"params": ...} when calling. Also derefs $defs,
+    drops noise fields, restores key enums, and slims metadata."""
+    defs = args_schema.get("$defs", {})
+    params = args_schema.get("properties", {}).get("params", {})
+    resolved = _deref(params, defs)
+    if isinstance(resolved, dict):
+        resolved.pop("$defs", None)
+        props = resolved.get("properties")
+        if isinstance(props, dict):
+            for f in DROP_FIELDS:
+                props.pop(f, None)
+            for field, values in FIELD_ENUMS.items():
+                if isinstance(props.get(field), dict):
+                    props[field]["enum"] = values
+        req = resolved.get("required")
+        if isinstance(req, list):
+            resolved["required"] = [r for r in req if r not in DROP_FIELDS]
+        resolved.setdefault("type", "object")
+    return _slim_schema(resolved)
+
+
 def _force_json(tool: StructuredTool) -> StructuredTool:
-    """Wrap a Kapruka MCP tool so every call requests structured JSON output
-    (the MCP default is markdown; the gallery needs JSON), with a concise
-    description and slimmed arg schema to keep per-call tokens low."""
+    """Wrap a Kapruka MCP tool: flatten the `params` wrapper for the model, re-wrap +
+    force JSON output on call, with a concise description and slim schema."""
 
     async def _call(**kwargs: Any) -> Any:
-        params = dict(kwargs.get("params") or {})
+        # Tolerate a model that wrapped args in `params` anyway.
+        if set(kwargs) == {"params"} and isinstance(kwargs["params"], dict):
+            params = dict(kwargs["params"])
+        else:
+            params = {k: v for k, v in kwargs.items() if v is not None}
         params["response_format"] = "json"
-        return await tool.ainvoke({"params": params})
+        try:
+            return await tool.ainvoke({"params": params})
+        except Exception as exc:  # noqa: BLE001
+            # Return the error so the agent can self-correct, rather than dying.
+            return f"Error calling {tool.name}: {exc}. Fix the arguments and try again."
 
     return StructuredTool(
         name=tool.name,
         description=TOOL_DESCRIPTIONS.get(tool.name, (tool.description or "").strip()[:200]),
-        args_schema=_slim_schema(tool.args_schema),
+        args_schema=_inner_schema(tool.args_schema),
         coroutine=_call,
     )
 
@@ -110,6 +161,8 @@ def _make_llm() -> ChatGroq:
         "temperature": 0.6,
         "max_tokens": MAX_TOKENS,  # cap output tokens (helps stay under TPM limits)
         "max_retries": 2,          # auto-retry transient 429s (respects Retry-After)
+        # One tool call per step — avoids the model firing duplicate parallel searches.
+        "model_kwargs": {"parallel_tool_calls": False},
     }
     if "gpt-oss" in MODEL:
         kwargs["reasoning_effort"] = REASONING_EFFORT
