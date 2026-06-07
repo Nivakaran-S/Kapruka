@@ -99,7 +99,7 @@ async def main():
                             "city": city,
                             "date": "2026-06-20",
                         },
-                        "sender": {"name": "Kapi Test"},
+                        "sender": {"name": "Kavi Test"},
                         "gift_message": "Test order — please ignore.",
                     },
                 )

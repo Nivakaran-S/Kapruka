@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useKapi } from "../lib/store";
+import { useKavi } from "../lib/store";
 import { Composer } from "./Composer";
-import { KapiAvatar } from "./KapiAvatar";
+import { KaviAvatar } from "./KaviAvatar";
 import { MessageBubble } from "./MessageBubble";
 
 const SUGGESTIONS = [
@@ -14,7 +14,7 @@ const SUGGESTIONS = [
 ];
 
 export function ChatPanel() {
-  const { state, send } = useKapi();
+  const { state, send } = useKavi();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,9 +28,9 @@ export function ChatPanel() {
     <div className="flex h-full flex-col bg-cream/60">
       {/* header */}
       <header className="glass flex items-center gap-3 border-b border-line px-4 py-3">
-        <KapiAvatar size={40} bob />
+        <KaviAvatar size={40} bob />
         <div className="leading-tight">
-          <h1 className="text-[17px] font-semibold kapi-wordmark">Kapi</h1>
+          <h1 className="text-[17px] font-semibold kavi-wordmark">Kavi</h1>
           <p className="text-xs text-muted">Sri Lanka&apos;s AI shopping companion</p>
         </div>
         <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-teal-wash px-2.5 py-1 text-[11px] font-medium text-teal-dark">
@@ -62,9 +62,9 @@ function Welcome({ onPick }: { onPick: (t: string) => void }) {
   return (
     <div className="mx-auto max-w-md py-6 text-center">
       <div className="mx-auto mb-4 w-fit">
-        <KapiAvatar size={64} bob />
+        <KaviAvatar size={64} bob />
       </div>
-      <h2 className="text-xl font-semibold text-ink">Ayubowan! I&apos;m Kapi 🙏</h2>
+      <h2 className="text-xl font-semibold text-ink">Ayubowan! I&apos;m Kavi 🙏</h2>
       <p className="mx-auto mt-2 max-w-sm text-[14px] leading-relaxed text-muted">
         Tell me who you&apos;re shopping for, the occasion, and your budget — I&apos;ll find the
         perfect gift on Kapruka. Chat in <span className="font-medium text-teal-dark">English</span>,{" "}

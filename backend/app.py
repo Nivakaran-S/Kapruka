@@ -1,4 +1,4 @@
-"""Kapi backend — FastAPI on Hugging Face Spaces.
+"""Kavi backend — FastAPI on Hugging Face Spaces.
 
 Exposes an SSE chat endpoint that runs the Groq + Kapruka-MCP agent loop.
 The Vercel frontend calls this directly (CORS-enabled). The Groq key never
@@ -21,17 +21,21 @@ from pydantic import BaseModel, Field  # noqa: E402
 
 from agent import MODEL, run_agent  # noqa: E402
 
-app = FastAPI(title="Kapi — Kapruka AI Shopping Companion", version="1.0.0")
+app = FastAPI(title="Kavi — Kapruka AI Shopping Companion", version="1.0.0")
 
-# --- CORS: allow the Vercel app(s) + local dev ------------------------------- #
+# --- CORS: allow the Vercel app(s), nivakaran.dev (+ subdomains), and local dev #
 _origins_env = os.environ.get("ALLOWED_ORIGINS", "")
 allow_origins = [o.strip() for o in _origins_env.split(",") if o.strip()]
 allow_origins += ["http://localhost:3000", "http://127.0.0.1:3000"]
 
+# Any *.vercel.app preview/prod, plus nivakaran.dev and any of its subdomains
+# (e.g. https://kavi.nivakaran.dev). Origin headers carry no path/trailing slash.
+ORIGIN_REGEX = r"https://([a-z0-9-]+\.)*(vercel\.app|nivakaran\.dev)$"
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
-    allow_origin_regex=r"https://.*\.vercel\.app",  # all Vercel previews + prod
+    allow_origin_regex=ORIGIN_REGEX,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -61,7 +65,7 @@ class ChatRequest(BaseModel):
 @app.get("/")
 async def root():
     return {
-        "name": "Kapi backend",
+        "name": "Kavi backend",
         "status": "ok",
         "model": MODEL,
         "endpoints": {"chat": "POST /api/chat (SSE)", "health": "GET /health"},
@@ -85,7 +89,7 @@ async def chat(req: ChatRequest):
 
     async def event_stream():
         # Initial comment forces the proxy to flush headers promptly.
-        yield ": kapi-stream-open\n\n"
+        yield ": kavi-stream-open\n\n"
         try:
             async for event in run_agent(messages, cart, thread_id):
                 yield _sse(event)

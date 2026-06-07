@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ----------------------------------------------------------------------------
-   Kapi — Sri Lankan design system (teal / gold / cream)
+   Kavi — Sri Lankan design system (teal / gold / cream)
    Upgraded with ui-ux-pro-max "Liquid Glass" style + accessibility rules,
    while keeping the mandated brand palette.
 ---------------------------------------------------------------------------- */
@@ -121,30 +121,30 @@ a,
 }
 
 /* ---- animations -------------------------------------------------------- */
-@keyframes kapi-bob {
+@keyframes kavi-bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-3px); }
 }
-@keyframes kapi-dot {
+@keyframes kavi-dot {
   0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
   40% { opacity: 1; transform: translateY(-3px); }
 }
-@keyframes kapi-shimmer {
+@keyframes kavi-shimmer {
   0% { background-position: -400px 0; }
   100% { background-position: 400px 0; }
 }
 
-.kapi-bob { animation: kapi-bob 3.5s ease-in-out infinite; }
-.kapi-dot { animation: kapi-dot 1.2s infinite ease-in-out; }
+.kavi-bob { animation: kavi-bob 3.5s ease-in-out infinite; }
+.kavi-dot { animation: kavi-dot 1.2s infinite ease-in-out; }
 
-.kapi-skeleton {
+.kavi-skeleton {
   background: linear-gradient(90deg, #efe7d8 25%, #f7f0e2 37%, #efe7d8 63%);
   background-size: 800px 100%;
-  animation: kapi-shimmer 1.4s infinite linear;
+  animation: kavi-shimmer 1.4s infinite linear;
 }
 
 /* gold/teal gradient text for the wordmark */
-.kapi-wordmark {
+.kavi-wordmark {
   background: linear-gradient(100deg, var(--color-teal-dark), var(--color-teal-light) 55%, var(--color-gold));
   -webkit-background-clip: text;
   background-clip: text;
@@ -161,9 +161,9 @@ a,
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .kapi-bob,
-  .kapi-dot,
-  .kapi-skeleton {
+  .kavi-bob,
+  .kavi-dot,
+  .kavi-skeleton {
     animation: none !important;
   }
 }

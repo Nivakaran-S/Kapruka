@@ -1,4 +1,4 @@
-"""The Kapi agent — LangGraph ReAct agent over Groq (langchain-groq) with the
+"""The Kavi agent — LangGraph ReAct agent over Groq (langchain-groq) with the
 Kapruka MCP tools loaded via langchain-mcp-adapters, plus an in-memory
 checkpointer so each conversation thread remembers prior turns (incl. the
 products it showed — so "add the second one" works across turns).
@@ -57,7 +57,7 @@ TOOL_DESCRIPTIONS = {
 # can't be trusted across instances, so we don't use the checkpointer and instead
 # replay the full client-sent history each turn. On HF (always-on process) we use
 # the per-thread checkpointer for efficient memory.
-STATELESS = bool(os.environ.get("KAPI_STATELESS") or os.environ.get("VERCEL"))
+STATELESS = bool(os.environ.get("KAVI_STATELESS") or os.environ.get("VERCEL"))
 
 # In-process conversation memory (per thread_id). Resets on restart — fine for
 # a single-process HF Space; swap for a persistent saver to survive restarts.

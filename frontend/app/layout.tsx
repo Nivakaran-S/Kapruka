@@ -26,9 +26,9 @@ const notoSinhala = Noto_Sans_Sinhala({
 });
 
 export const metadata: Metadata = {
-  title: "Kapi — Sri Lanka's AI Shopping Companion",
+  title: "Kavi — Sri Lanka's AI Shopping Companion",
   description:
-    "Kapi is a warm, Sinhala-first AI shopping companion for Kapruka. Find the perfect gift for any occasion — in English, Sinhala, or Tanglish.",
+    "Kavi is a warm, Sinhala-first AI shopping companion for Kapruka. Find the perfect gift for any occasion — in English, Sinhala, or Tanglish.",
 };
 
 export const viewport: Viewport = {

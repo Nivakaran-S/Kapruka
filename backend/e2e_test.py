@@ -57,7 +57,7 @@ async def run_one(label, prompt, cart):
         elif t == "error":
             errors.append(ev["message"])
             print(f"  !! error: {ev['message']}")
-    print("\n  Kapi says:")
+    print("\n  Kavi says:")
     print("  " + "".join(text).replace("\n", "\n  "))
     print(f"\n  summary: {len(tool_calls)} tool call(s), tools={results}, errors={errors}")
 

@@ -175,7 +175,7 @@ function galleryFromResult(tool: ToolName, data: unknown): GalleryView | null {
 
 // ---- context --------------------------------------------------------------
 
-interface KapiContext {
+interface KaviContext {
   state: State;
   send: (text: string) => void;
   addToCart: (item: CartItem) => void;
@@ -187,9 +187,9 @@ interface KapiContext {
   cartTotal: number;
 }
 
-const Ctx = createContext<KapiContext | null>(null);
+const Ctx = createContext<KaviContext | null>(null);
 
-export function KapiProvider({ children }: { children: ReactNode }) {
+export function KaviProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const busy = useRef(false);
   // Stable per-session id keying the backend's LangGraph conversation memory.
@@ -239,7 +239,7 @@ export function KapiProvider({ children }: { children: ReactNode }) {
         .catch((err: unknown) => {
           dispatch({
             t: "error",
-            message: err instanceof Error ? err.message : "Something went wrong talking to Kapi.",
+            message: err instanceof Error ? err.message : "Something went wrong talking to Kavi.",
           });
         })
         .finally(() => {
@@ -251,7 +251,7 @@ export function KapiProvider({ children }: { children: ReactNode }) {
     [state.messages, state.cart]
   );
 
-  const value = useMemo<KapiContext>(() => {
+  const value = useMemo<KaviContext>(() => {
     const cartCount = state.cart.reduce((n, c) => n + c.quantity, 0);
     const cartTotal = state.cart.reduce((n, c) => n + c.price * c.quantity, 0);
     return {
@@ -270,9 +270,9 @@ export function KapiProvider({ children }: { children: ReactNode }) {
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-export function useKapi(): KapiContext {
+export function useKavi(): KaviContext {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error("useKapi must be used within KapiProvider");
+  if (!ctx) throw new Error("useKavi must be used within KaviProvider");
   return ctx;
 }
 

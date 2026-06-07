@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { isSinhala } from "../lib/store";
 import type { ChatMessage } from "../lib/types";
-import { KapiAvatar, TypingDots } from "./KapiAvatar";
+import { KaviAvatar, TypingDots } from "./KaviAvatar";
 
 export function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === "user";
@@ -17,7 +17,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
       transition={{ duration: 0.25 }}
       className={`flex gap-2.5 ${isUser ? "flex-row-reverse" : "flex-row"}`}
     >
-      {!isUser && <KapiAvatar size={30} />}
+      {!isUser && <KaviAvatar size={30} />}
       <div
         className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-[14px] leading-relaxed shadow-sm ${
           isUser

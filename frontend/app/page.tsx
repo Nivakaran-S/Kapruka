@@ -5,14 +5,14 @@ import { CartSidebar } from "./components/CartSidebar";
 import { ChatPanel } from "./components/ChatPanel";
 import { GalleryPanel } from "./components/GalleryPanel";
 import { CartIcon, ChatIcon, GalleryIcon } from "./components/icons";
-import { KapiProvider, useKapi } from "./lib/store";
+import { KaviProvider, useKavi } from "./lib/store";
 
 export default function Home() {
   return (
-    <KapiProvider>
+    <KaviProvider>
       <Shell />
       <CartSidebar />
-    </KapiProvider>
+    </KaviProvider>
   );
 }
 
@@ -78,7 +78,7 @@ function TabButton({
 }
 
 function CartButton({ className = "" }: { className?: string }) {
-  const { cartCount, setCartOpen } = useKapi();
+  const { cartCount, setCartOpen } = useKavi();
   return (
     <button
       onClick={() => setCartOpen(true)}

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { formatLKR, useKapi } from "../lib/store";
+import { formatLKR, useKavi } from "../lib/store";
 import type { SearchProduct } from "../lib/types";
 import { CartIcon, CheckIcon } from "./icons";
 
@@ -13,7 +13,7 @@ const PLACEHOLDER =
   );
 
 export function ProductCard({ product, width }: { product: SearchProduct; width?: number }) {
-  const { addToCart } = useKapi();
+  const { addToCart } = useKavi();
   const [added, setAdded] = useState(false);
   const [imgErr, setImgErr] = useState(false);
   const price = product.price?.amount ?? null;

@@ -1,4 +1,4 @@
-"""Kapi's system prompt — persona, language rules, occasion intelligence, and
+"""Kavi's system prompt — persona, language rules, occasion intelligence, and
 tool-orchestration guidance. Kept concise to minimise per-call tokens."""
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ def system_prompt(cart: list[dict[str, Any]] | None = None) -> str:
     occ = _upcoming_occasions(now)
     occ_str = ("Soon: " + "; ".join(occ) + ". Mention if relevant.") if occ else ""
 
-    return f"""You are Kapi, Sri Lanka's friendly AI shopping companion for Kapruka.com — warm, witty,
+    return f"""You are Kavi, Sri Lanka's friendly AI shopping companion for Kapruka.com — warm, witty,
 culturally fluent, never robotic. Today: {today_str} (Asia/Colombo).
 
 LANGUAGE — mirror the user: Unicode Sinhala → reply in Sinhala; Tanglish (romanised Sinhala

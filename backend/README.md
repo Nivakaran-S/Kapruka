@@ -1,5 +1,5 @@
 ---
-title: Kapi Backend
+title: Kavi Backend
 emoji: 🎁
 colorFrom: green
 colorTo: yellow
@@ -8,9 +8,9 @@ app_port: 7860
 pinned: false
 ---
 
-# Kapi — Backend
+# Kavi — Backend
 
-FastAPI backend for **Kapi**, Sri Lanka's AI shopping companion (Kapruka Agent
+FastAPI backend for **Kavi**, Sri Lanka's AI shopping companion (Kapruka Agent
 Challenge 2026). It runs a **LangGraph ReAct agent** on **Groq** that calls the
 **Kapruka MCP** server's 7 commerce tools, streaming results to the Next.js
 frontend over SSE.

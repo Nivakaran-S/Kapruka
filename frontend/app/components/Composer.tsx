@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useKapi } from "../lib/store";
+import { useKavi } from "../lib/store";
 import { MicIcon, SendIcon } from "./icons";
 
 // Minimal typings for the Web Speech API (not in lib.dom by default).
@@ -17,7 +17,7 @@ interface SpeechRecognitionLike {
 }
 
 export function Composer() {
-  const { send, state } = useKapi();
+  const { send, state } = useKavi();
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   // Resolved after mount so SSR and first client render match (avoids hydration mismatch).
@@ -97,7 +97,7 @@ export function Composer() {
             }
           }}
           rows={1}
-          placeholder="Ask Kapi for a gift…  (English · සිංහල · Tanglish)"
+          placeholder="Ask Kavi for a gift…  (English · සිංහල · Tanglish)"
           className="max-h-[140px] flex-1 resize-none bg-transparent px-2.5 py-2 text-[14px] text-ink outline-none placeholder:text-muted"
         />
         {hasVoice && (

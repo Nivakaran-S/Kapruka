@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { formatLKR, useKapi } from "../lib/store";
+import { formatLKR, useKavi } from "../lib/store";
 import { CartIcon, CloseIcon, MinusIcon, PlusIcon } from "./icons";
 
 const PLACEHOLDER =
@@ -11,7 +11,7 @@ const PLACEHOLDER =
   );
 
 export function CartSidebar() {
-  const { state, setCartOpen, removeFromCart, setQty, cartTotal, cartCount, send } = useKapi();
+  const { state, setCartOpen, removeFromCart, setQty, cartTotal, cartCount, send } = useKavi();
 
   function checkout() {
     setCartOpen(false);
@@ -52,7 +52,7 @@ export function CartSidebar() {
                 <div className="flex h-full flex-col items-center justify-center text-center text-muted">
                   <CartIcon size={40} />
                   <p className="mt-3 text-[14px]">Your cart is empty.</p>
-                  <p className="text-[12.5px]">Ask Kapi for gift ideas and tap “Add to cart”.</p>
+                  <p className="text-[12.5px]">Ask Kavi for gift ideas and tap “Add to cart”.</p>
                 </div>
               ) : (
                 state.cart.map((item) => (
@@ -98,9 +98,9 @@ export function CartSidebar() {
                   onClick={checkout}
                   className="w-full rounded-2xl bg-teal px-5 py-3.5 text-[15px] font-semibold text-white shadow-md transition hover:bg-teal-dark"
                 >
-                  Checkout with Kapi →
+                  Checkout with Kavi →
                 </button>
-                <p className="mt-2 text-center text-[11.5px] text-muted">Kapi will sort out delivery &amp; payment</p>
+                <p className="mt-2 text-center text-[11.5px] text-muted">Kavi will sort out delivery &amp; payment</p>
               </footer>
             )}
           </motion.aside>

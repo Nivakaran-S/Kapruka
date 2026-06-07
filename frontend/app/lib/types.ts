@@ -1,5 +1,5 @@
 // Types mirroring the Kapruka MCP JSON responses (captured from the live server)
-// and the SSE event protocol emitted by the Kapi backend.
+// and the SSE event protocol emitted by the Kavi backend.
 
 export interface Price {
   amount: number | null;

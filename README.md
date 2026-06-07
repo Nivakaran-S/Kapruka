@@ -1,7 +1,7 @@
-# Kapi 🐵🎁 — Sri Lanka's AI Shopping Companion
+# Kavi 🐵🎁 — Sri Lanka's AI Shopping Companion
 
-Kapi is a warm, **Sinhala-first** agentic shopping companion for [Kapruka](https://www.kapruka.com),
-built for the **Kapruka Agent Challenge 2026**. Chat in English, Sinhala, or Tanglish; Kapi
+Kavi is a warm, **Sinhala-first** agentic shopping companion for [Kapruka](https://www.kapruka.com),
+built for the **Kapruka Agent Challenge 2026**. Chat in English, Sinhala, or Tanglish; Kavi
 finds gifts, checks delivery, builds a cart, and takes you to a secure click-to-pay checkout —
 with every result rendered as a live visual gallery beside the chat.
 

@@ -1,9 +1,9 @@
 "use client";
 
-export function KapiAvatar({ size = 40, bob = false }: { size?: number; bob?: boolean }) {
+export function KaviAvatar({ size = 40, bob = false }: { size?: number; bob?: boolean }) {
   return (
     <div
-      className={`relative flex items-center justify-center rounded-full shadow-sm ${bob ? "kapi-bob" : ""}`}
+      className={`relative flex items-center justify-center rounded-full shadow-sm ${bob ? "kavi-bob" : ""}`}
       style={{
         width: size,
         height: size,
@@ -29,11 +29,11 @@ export function KapiAvatar({ size = 40, bob = false }: { size?: number; bob?: bo
 
 export function TypingDots() {
   return (
-    <span className="inline-flex items-center gap-1 py-1" aria-label="Kapi is typing">
+    <span className="inline-flex items-center gap-1 py-1" aria-label="Kavi is typing">
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className="kapi-dot inline-block h-1.5 w-1.5 rounded-full bg-teal"
+          className="kavi-dot inline-block h-1.5 w-1.5 rounded-full bg-teal"
           style={{ animationDelay: `${i * 0.16}s` }}
         />
       ))}

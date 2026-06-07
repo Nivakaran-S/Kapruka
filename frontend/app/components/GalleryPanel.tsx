@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { formatLKR, useKapi } from "../lib/store";
+import { formatLKR, useKavi } from "../lib/store";
 import type {
   Category,
   DeliveryCheck,
@@ -11,12 +11,12 @@ import type {
   SearchProduct,
   TrackResult,
 } from "../lib/types";
-import { KapiAvatar } from "./KapiAvatar";
+import { KaviAvatar } from "./KaviAvatar";
 import { CheckIcon, ExternalIcon, SearchIcon } from "./icons";
 import { ProductCard } from "./ProductCard";
 
 export function GalleryPanel() {
-  const { state } = useKapi();
+  const { state } = useKavi();
   const g = state.gallery;
 
   return (
@@ -57,11 +57,11 @@ function SectionTitle({ children, sub }: { children: React.ReactNode; sub?: stri
 function Welcome() {
   return (
     <div className="flex h-[70vh] flex-col items-center justify-center text-center">
-      <KapiAvatar size={84} bob />
+      <KaviAvatar size={84} bob />
       <h2 className="mt-5 text-2xl font-semibold text-ink">Your gift gallery</h2>
       <p className="mt-2 max-w-sm text-[14px] leading-relaxed text-muted">
         As we chat, the perfect picks appear here — beautiful cards, prices in LKR, delivery
-        checks, and a one-tap secure checkout. Start by telling Kapi who you&apos;re shopping for. 🎁
+        checks, and a one-tap secure checkout. Start by telling Kavi who you&apos;re shopping for. 🎁
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
         {["🎂 Cakes", "💐 Flowers", "🍫 Chocolates", "🫖 Ceylon Tea", "💎 Jewellery"].map((t) => (
@@ -78,17 +78,17 @@ function LoadingGrid({ label }: { label: string }) {
   return (
     <div>
       <div className="mb-4 flex items-center gap-2 text-[14px] font-medium text-teal-dark">
-        <span className="kapi-dot inline-block h-2 w-2 rounded-full bg-teal-light" />
+        <span className="kavi-dot inline-block h-2 w-2 rounded-full bg-teal-light" />
         {label}
       </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="overflow-hidden rounded-2xl border border-line bg-card">
-            <div className="kapi-skeleton aspect-square w-full" />
+            <div className="kavi-skeleton aspect-square w-full" />
             <div className="space-y-2 p-3">
-              <div className="kapi-skeleton h-3 w-4/5 rounded" />
-              <div className="kapi-skeleton h-3 w-2/5 rounded" />
-              <div className="kapi-skeleton h-8 w-full rounded-xl" />
+              <div className="kavi-skeleton h-3 w-4/5 rounded" />
+              <div className="kavi-skeleton h-3 w-2/5 rounded" />
+              <div className="kavi-skeleton h-8 w-full rounded-xl" />
             </div>
           </div>
         ))}
@@ -113,7 +113,7 @@ function Products({ products, query }: { products: SearchProduct[]; query?: stri
 }
 
 function Hero({ product }: { product: ProductDetail }) {
-  const { addToCart } = useKapi();
+  const { addToCart } = useKavi();
   const img = product.images?.[0];
   const price = product.price?.amount ?? null;
   return (
@@ -187,7 +187,7 @@ function Hero({ product }: { product: ProductDetail }) {
 function Categories({ categories }: { categories: Category[] }) {
   return (
     <div>
-      <SectionTitle sub="Tap a category and tell Kapi what you're after">Browse categories</SectionTitle>
+      <SectionTitle sub="Tap a category and tell Kavi what you're after">Browse categories</SectionTitle>
       <div className="flex flex-wrap gap-2">
         {categories.map((c) => (
           <a
