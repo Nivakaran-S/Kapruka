@@ -11,13 +11,11 @@ const PLACEHOLDER =
   );
 
 export function CartSidebar() {
-  const { state, setCartOpen, removeFromCart, setQty, cartTotal, cartCount, send } = useKavi();
+  const { state, setCartOpen, removeFromCart, setQty, cartTotal, cartCount, setCheckoutOpen } =
+    useKavi();
 
   function checkout() {
-    setCartOpen(false);
-    send(
-      "I'd like to checkout the items in my cart — please help me complete the order (you have my cart)."
-    );
+    setCheckoutOpen(true); // the store also closes the cart
   }
 
   return (

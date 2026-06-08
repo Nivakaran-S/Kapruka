@@ -294,6 +294,14 @@ def _is_error(data: Any) -> bool:
     return False
 
 
+# Never let em/en dashes (the classic AI tell) reach the chat — replace with "-".
+_DASHES = {0x2014: "-", 0x2013: "-", 0x2015: "-"}
+
+
+def _no_dash(s: Any) -> Any:
+    return s.translate(_DASHES) if isinstance(s, str) else s
+
+
 async def run_agent(
     messages: list[dict[str, Any]],
     cart: list[dict[str, Any]] | None = None,
@@ -323,6 +331,11 @@ async def run_agent(
         payload = {"messages": [HumanMessage(content=_last_user(messages))]}
         config = {"configurable": {"thread_id": thread_id}, "recursion_limit": RECURSION_LIMIT}
 
+    # Our wrapped tool calls the underlying adapter tool, which emits its own nested
+    # tool events. Track outer tool run_ids so we only surface ONE event per call.
+    outer_runs: set[str] = set()
+    last_result_sig: str | None = None
+
     try:
         async for ev in agent.astream_events(payload, config=config, version="v2"):
             kind = ev.get("event")
@@ -334,13 +347,26 @@ async def run_agent(
                         b.get("text", "") for b in text if isinstance(b, dict)
                     )
                 if text:
-                    yield {"type": "token", "text": text}
+                    yield {"type": "token", "text": _no_dash(text)}
             elif kind == "on_tool_start":
+                run_id = ev.get("run_id")
+                parents = ev.get("parent_ids") or []
+                if any(p in outer_runs for p in parents):
+                    continue  # nested inner tool invocation — skip
+                if run_id:
+                    outer_runs.add(run_id)
                 args = ev["data"].get("input") or {}
                 inner = args.get("params", args) if isinstance(args, dict) else args
                 yield {"type": "tool_call", "name": ev.get("name", ""), "args": inner}
             elif kind == "on_tool_end":
+                run_id = ev.get("run_id")
+                if outer_runs and run_id not in outer_runs:
+                    continue  # nested inner tool — skip
                 data = _extract_tool_text(ev["data"].get("output"))
+                sig = f"{ev.get('name','')}:{json.dumps(data, default=str)[:300]}"
+                if sig == last_result_sig:
+                    continue  # safety net: drop a duplicate consecutive result
+                last_result_sig = sig
                 yield {
                     "type": "tool_result",
                     "tool": ev.get("name", ""),
@@ -352,8 +378,8 @@ async def run_agent(
         msg = str(exc)
         low = msg.lower()
         if "rate_limit" in low or "429" in low or "tokens per minute" in low:
-            msg = "I'm getting rate-limited right now 🙏 — please try again in a few seconds."
+            msg = "I'm a bit rate-limited right now 🙏 please try again in a few seconds."
         elif "recursion" in low and "limit" in low:
-            msg = "That request needed too many steps — could you narrow it down a little?"
-        yield {"type": "error", "message": msg}
+            msg = "That took too many steps. Could you narrow it down a little?"
+        yield {"type": "error", "message": _no_dash(msg)}
         yield {"type": "done"}

@@ -1,5 +1,7 @@
 "use client";
 
+import confetti from "canvas-confetti";
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatLKR, useKavi } from "../lib/store";
 import type {
@@ -60,7 +62,7 @@ function Welcome() {
       <KaviAvatar size={84} bob />
       <h2 className="mt-5 text-2xl font-semibold text-ink">Your gift gallery</h2>
       <p className="mt-2 max-w-sm text-[14px] leading-relaxed text-muted">
-        As we chat, the perfect picks appear here — beautiful cards, prices in LKR, delivery
+        As we chat, the perfect picks appear here - beautiful cards, prices in LKR, delivery
         checks, and a one-tap secure checkout. Start by telling Kavi who you&apos;re shopping for. 🎁
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -247,7 +249,7 @@ function Delivery({ delivery }: { delivery: DeliveryCheck }) {
         {delivery.next_available_date && (
           <p className="mt-3 rounded-lg bg-gold-wash px-3 py-2 text-[12.5px] text-gold">
             Next available: {delivery.next_available_date}
-            {delivery.reason ? ` — ${delivery.reason}` : ""}
+            {delivery.reason ? ` - ${delivery.reason}` : ""}
           </p>
         )}
         {delivery.perishable_warning && (
@@ -260,6 +262,14 @@ function Delivery({ delivery }: { delivery: DeliveryCheck }) {
 
 function Order({ order }: { order: OrderResult }) {
   const s = order.summary;
+  useEffect(() => {
+    confetti({
+      particleCount: 130,
+      spread: 75,
+      origin: { y: 0.35 },
+      colors: ["#0f6e56", "#1d9e75", "#fac775", "#b8791b"],
+    });
+  }, []);
   return (
     <div className="flex flex-col items-center py-4 text-center">
       <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 200, damping: 14 }}>

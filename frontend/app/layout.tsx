@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Display/heading face — friendly, modern, retail-leaning (per ui-ux-pro-max pairing).
+// Display/heading face - friendly, modern, retail-leaning (per ui-ux-pro-max pairing).
 const rubik = Rubik({
   variable: "--font-rubik",
   subsets: ["latin"],
@@ -26,9 +26,9 @@ const notoSinhala = Noto_Sans_Sinhala({
 });
 
 export const metadata: Metadata = {
-  title: "Kavi — Sri Lanka's AI Shopping Companion",
+  title: "Kavi - Sri Lanka's AI Shopping Companion",
   description:
-    "Kavi is a warm, Sinhala-first AI shopping companion for Kapruka. Find the perfect gift for any occasion — in English, Sinhala, or Tanglish.",
+    "Kavi is a warm, Sinhala-first AI shopping companion for Kapruka. Find the perfect gift for any occasion - in English, Sinhala, or Tanglish.",
 };
 
 export const viewport: Viewport = {

@@ -77,6 +77,26 @@ async def health():
     return {"status": "ok", "model": MODEL, "groq_key_set": bool(os.environ.get("GROQ_API_KEY"))}
 
 
+@app.get("/api/cities")
+async def cities(q: str = "", limit: int = 8):
+    """Delivery-city autocomplete for the checkout panel (proxies the MCP tool)."""
+    if len(q.strip()) < 2:
+        return {"cities": []}
+    try:
+        from mcp_client import call_tool as mcp_call
+        from mcp_client import mcp_session
+
+        async with mcp_session() as session:
+            data, _err = await mcp_call(
+                session, "kapruka_list_delivery_cities", {"query": q.strip(), "limit": limit}
+            )
+        if isinstance(data, dict) and isinstance(data.get("cities"), list):
+            return {"cities": data["cities"]}
+    except Exception:  # noqa: BLE001
+        pass
+    return {"cities": []}
+
+
 def _sse(event: dict) -> str:
     return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
 

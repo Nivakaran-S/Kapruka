@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { CartSidebar } from "./components/CartSidebar";
 import { ChatPanel } from "./components/ChatPanel";
+import { CheckoutPanel } from "./components/CheckoutPanel";
 import { GalleryPanel } from "./components/GalleryPanel";
+import { OccasionBanner } from "./components/OccasionBanner";
 import { CartIcon, ChatIcon, GalleryIcon } from "./components/icons";
 import { KaviProvider, useKavi } from "./lib/store";
 
@@ -12,28 +14,37 @@ export default function Home() {
     <KaviProvider>
       <Shell />
       <CartSidebar />
+      <CheckoutPanel />
     </KaviProvider>
   );
 }
 
 function Shell() {
+  const { state, markGallerySeen } = useKavi();
   const [mobileTab, setMobileTab] = useState<"chat" | "gallery">("chat");
+
+  function showGallery() {
+    setMobileTab("gallery");
+    markGallerySeen();
+  }
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
+      <OccasionBanner />
+
       {/* Mobile tab switch */}
       <div className="glass flex items-center gap-2 border-b border-line px-3 py-2 md:hidden">
         <TabButton active={mobileTab === "chat"} onClick={() => setMobileTab("chat")}>
           <ChatIcon size={16} /> Chat
         </TabButton>
-        <TabButton active={mobileTab === "gallery"} onClick={() => setMobileTab("gallery")}>
+        <TabButton active={mobileTab === "gallery"} onClick={showGallery} badge={state.galleryUnseen && mobileTab === "chat"}>
           <GalleryIcon size={16} /> Gallery
         </TabButton>
         <CartButton className="ml-auto" />
       </div>
 
       <div className="flex min-h-0 flex-1">
-        {/* Chat — 40% on desktop */}
+        {/* Chat: 40% on desktop */}
         <section
           className={`min-h-0 w-full border-r border-line md:block md:w-2/5 ${
             mobileTab === "chat" ? "block" : "hidden"
@@ -42,7 +53,7 @@ function Shell() {
           <ChatPanel />
         </section>
 
-        {/* Gallery — 60% on desktop */}
+        {/* Gallery: 60% on desktop */}
         <section
           className={`relative min-h-0 w-full md:block md:w-3/5 ${
             mobileTab === "gallery" ? "block" : "hidden"
@@ -60,19 +71,24 @@ function TabButton({
   active,
   onClick,
   children,
+  badge = false,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  badge?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition ${
+      className={`relative flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition ${
         active ? "bg-teal text-white" : "bg-cream-soft text-muted hover:text-ink"
       }`}
     >
       {children}
+      {badge && (
+        <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-gold ring-2 ring-cream" />
+      )}
     </button>
   );
 }
